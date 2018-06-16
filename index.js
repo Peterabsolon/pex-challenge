@@ -36,12 +36,12 @@ function mergeErrors(errors) {
 /**
  * Traverses errors map recursively and joins list entries into a string
  */
-function traverseAndJoin(errors) {
+function preserveAndJoinErrors(errors) {
   return errors.map(entry => {
     if (Immutable.List.isList(entry)) {
       return joinErrors(entry);
     } else {
-      return traverseAndJoin(entry);
+      return preserveAndJoinErrors(entry);
     }
   });
 }
@@ -51,11 +51,11 @@ function traverseAndJoin(errors) {
  */
 function transformErrors(errors, preserveKeysSet) {
   return errors.mapEntries(([key, entry]) => {
-    if (!preserveKeysSet.has(key)) {
-      return [key, mergeErrors(entry)];
+    if (preserveKeysSet.has(key)) {
+      return [key, preserveAndJoinErrors(entry)];
     }
 
-    return [key, traverseAndJoin(entry)];
+    return [key, mergeErrors(entry)];
   });
 }
 
