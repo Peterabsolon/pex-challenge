@@ -2,8 +2,7 @@ const Immutable = require("immutable");
 const assert = require("assert");
 
 /**
- * Create a Set from List to remove duplicates.
- * Could have used native "new Set()" as well.
+ * Could have used native "new Set()" as well
  */
 function toSet(list) {
   return Immutable.Set(list);
@@ -11,6 +10,7 @@ function toSet(list) {
 
 /**
  * Joins errors list into a trimmed, period separated string
+ * containing only unique errors by using Set to remove duplicates
  */
 function joinErrors(errorsList) {
   return [...toSet(errorsList)]
@@ -44,6 +44,7 @@ function preserveAndJoinErrors(errors) {
  */
 function transformErrors(errors, preserveKeysSet) {
   return errors.mapEntries(([key, entry]) => {
+    // O(1) lookup time using Set
     if (preserveKeysSet.has(key)) {
       return [key, preserveAndJoinErrors(entry)];
     }
