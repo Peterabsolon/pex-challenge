@@ -20,14 +20,14 @@ function joinErrors(errorsList) {
 }
 
 /**
- * Merges errors map/list
+ * Flattens errors map/list and returns a single string error
  */
 function mergeErrors(errors) {
   return joinErrors(errors.flatten().toList());
 }
 
 /**
- * Traverses errors map recursively and joins list entries
+ * Traverses errors map recursively and joins list entries into a single string
  */
 function preserveAndJoinErrors(errors) {
   return errors.map(entry => {
